@@ -2,13 +2,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const board = document.getElementById('board');
     const scoreDisplay = document.getElementById('score');
     const restartButton = document.getElementById('restartButton');
-    const btnUp = document.querySelector('.btn-up');
-    const btnDown = document.querySelector('.btn-down');
-    const btnLeft = document.querySelector('.btn-left');
-    const btnRight = document.querySelector('.btn-right');
     const size = 4;
     let tiles = [];
     let score = 0;
+    let startX, startY, endX, endY;
 
     // Initialize board with empty tiles
     function initBoard() {
@@ -40,11 +37,41 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', handleKeyPress);
     restartButton.addEventListener('click', initBoard);
 
-    // Handle virtual button events
-    btnUp.addEventListener('click', () => moveUp());
-    btnDown.addEventListener('click', () => moveDown());
-    btnLeft.addEventListener('click', () => moveLeft());
-    btnRight.addEventListener('click', () => moveRight());
+    // Handle touch events for mobile devices
+    document.addEventListener('touchstart', handleTouchStart);
+    document.addEventListener('touchend', handleTouchEnd);
+
+    function handleTouchStart(event) {
+        startX = event.touches[0].clientX;
+        startY = event.touches[0].clientY;
+    }
+
+    function handleTouchEnd(event) {
+        endX = event.changedTouches[0].clientX;
+        endY = event.changedTouches[0].clientY;
+        handleTouchMove();
+    }
+
+    function handleTouchMove() {
+        const deltaX = endX - startX;
+        const deltaY = endY - startY;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            // Left or right swipe
+            if (deltaX > 0) {
+                moveRight();
+            } else {
+                moveLeft();
+            }
+        } else {
+            // Up or down swipe
+            if (deltaY > 0) {
+                moveDown();
+            } else {
+                moveUp();
+            }
+        }
+    }
 
     function handleKeyPress(event) {
         switch (event.key) {
@@ -136,25 +163,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Merge tiles and calculate score
-    function mergeTiles(line) {
-        let newLine = line.filter(value => value != 0);
-        for (let i = 0; i < newLine.length - 1; i++) {
-            if (newLine[i] == newLine[i + 1]) {
-                newLine[i] *= 2;
-                score += newLine[i];
-                newLine.splice(i + 1, 1);
+    function mergeTiles(tiles) {
+        let newTiles = tiles.filter(value => value != 0);
+        for (let i = 0; i < newTiles.length - 1; i++) {
+            if (newTiles[i] == newTiles[i + 1]) {
+                newTiles[i] *= 2;
+                score += newTiles[i];
+                newTiles.splice(i + 1, 1);
             }
         }
-        while (newLine.length < size) {
-            newLine.push(0);
+        while (newTiles.length < size) {
+            newTiles.push(0);
         }
         updateScore();
-        return newLine;
+        return newTiles;
     }
 
     // Update score display
     function updateScore() {
-        scoreDisplay.textContent = `分數: ${score}`;
+        scoreDisplay.textContent = '分數: ' + score;
     }
 
     initBoard();

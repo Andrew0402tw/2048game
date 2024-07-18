@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const board = document.getElementById('board');
     const scoreDisplay = document.getElementById('score');
     const restartButton = document.getElementById('restartButton');
+    const gameOverDisplay = document.getElementById('gameOver');
     const size = 4;
     let tiles = [];
     let score = 0;
@@ -10,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize board with empty tiles
     function initBoard() {
         board.innerHTML = '';
+        gameOverDisplay.style.display = 'none';
         tiles = [];
         for (let i = 0; i < size * size; i++) {
             const tile = document.createElement('div');
@@ -105,7 +107,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 tiles[j * size + i].textContent = newColumn[j] != 0 ? newColumn[j] : '';
             }
         }
-        if (moved) addNewTile();
+        if (moved) {
+            addNewTile();
+            checkGameOver();
+        }
     }
 
     // Move tiles down
@@ -123,7 +128,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 tiles[j * size + i].textContent = newColumn[j] != 0 ? newColumn[j] : '';
             }
         }
-        if (moved) addNewTile();
+        if (moved) {
+            addNewTile();
+            checkGameOver();
+        }
     }
 
     // Move tiles left
@@ -141,7 +149,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 tiles[i * size + j].textContent = newRow[j] != 0 ? newRow[j] : '';
             }
         }
-        if (moved) addNewTile();
+        if (moved) {
+            addNewTile();
+            checkGameOver();
+        }
     }
 
     // Move tiles right
@@ -159,19 +170,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 tiles[i * size + j].textContent = newRow[j] != 0 ? newRow[j] : '';
             }
         }
-        if (moved) addNewTile();
+        if (moved) {
+            addNewTile();
+            checkGameOver();
+        }
     }
 
-    // Merge tiles and calculate score
+    // Merge tiles
     function mergeTiles(tiles) {
         let newTiles = tiles.filter(value => value != 0);
         for (let i = 0; i < newTiles.length - 1; i++) {
             if (newTiles[i] == newTiles[i + 1]) {
                 newTiles[i] *= 2;
                 score += newTiles[i];
-                newTiles.splice(i + 1, 1);
+                newTiles[i + 1] = 0;
             }
         }
+        newTiles = newTiles.filter(value => value != 0);
         while (newTiles.length < size) {
             newTiles.push(0);
         }
@@ -181,9 +196,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update score display
     function updateScore() {
-        scoreDisplay.textContent = '分數: ' + score;
+        scoreDisplay.textContent = `分數: ${score}`;
     }
 
-    // Automatically start the game on page load
+    // Check if game is over
+    function checkGameOver() {
+        let gameOver = true;
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                let current = parseInt(tiles[i * size + j].dataset.value);
+                if (current == 0) {
+                    gameOver = false;
+                }
+                if (i > 0 && current == parseInt(tiles[(i - 1) * size + j].dataset.value)) {
+                    gameOver = false;
+                }
+                if (i < size - 1 && current == parseInt(tiles[(i + 1) * size + j].dataset.value)) {
+                    gameOver = false;
+                }
+                if (j > 0 && current == parseInt(tiles[i * size + (j - 1)].dataset.value)) {
+                    gameOver = false;
+                }
+                if (j < size - 1 && current == parseInt(tiles[i * size + (j + 1)].dataset.value)) {
+                    gameOver = false;
+                }
+            }
+        }
+        if (gameOver) {
+            gameOverDisplay.style.display = 'block';
+        }
+    }
+
+    // Start game
     initBoard();
 });

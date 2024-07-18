@@ -7,6 +7,7 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     flex-direction: column;
+    position: relative;
 }
 
 h1 {
@@ -16,8 +17,7 @@ h1 {
 .game-info {
     display: flex;
     justify-content: space-between;
-    width: 90%;
-    max-width: 400px;
+    width: 400px;
     margin-bottom: 20px;
 }
 
@@ -47,28 +47,25 @@ h1 {
 
 #board {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 100px);
+    grid-template-rows: repeat(4, 100px);
     gap: 10px;
     background-color: #bbada0;
     padding: 10px;
     border-radius: 10px;
-    width: 90vw;
-    max-width: 400px;
-    height: 90vw;
-    max-height: 400px;
 }
 
 .tile {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100px;
+    height: 100px;
     background-color: #cdc1b4;
     font-size: 24px;
     border-radius: 5px;
     font-weight: bold;
     color: #776e65;
-    transition: all 0.2s;
 }
 
 .tile[data-value="2"] { background-color: #eee4da; color: #776e65; }
@@ -82,3 +79,17 @@ h1 {
 .tile[data-value="512"] { background-color: #edc850; color: #f9f6f2; }
 .tile[data-value="1024"] { background-color: #edc53f; color: #f9f6f2; }
 .tile[data-value="2048"] { background-color: #edc22e; color: #f9f6f2; }
+
+#gameOver {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 24px;
+    text-align: center;
+}

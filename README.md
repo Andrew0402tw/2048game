@@ -48,4 +48,4 @@
 ## 致謝 / Acknowledgements
 
 此項目靈感來自 Gabriele Cirulli 創建的原始 2048 遊戲。 / This project was inspired by the original 2048 game created by Gabriele Cirulli.
-(`[andrew0402tw.github.io/2048game](https://github.com/gabrielecirulli/2048)`)
+(`https://github.com/gabrielecirulli/2048`)

@@ -2,10 +2,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const board = document.getElementById('board');
     const scoreDisplay = document.getElementById('score');
     const restartButton = document.getElementById('restartButton');
+    const btnUp = document.querySelector('.btn-up');
+    const btnDown = document.querySelector('.btn-down');
+    const btnLeft = document.querySelector('.btn-left');
+    const btnRight = document.querySelector('.btn-right');
     const size = 4;
     let tiles = [];
     let score = 0;
-    
+
     // Initialize board with empty tiles
     function initBoard() {
         board.innerHTML = '';
@@ -35,6 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle key events for tile movements
     document.addEventListener('keydown', handleKeyPress);
     restartButton.addEventListener('click', initBoard);
+
+    // Handle virtual button events
+    btnUp.addEventListener('click', () => moveUp());
+    btnDown.addEventListener('click', () => moveDown());
+    btnLeft.addEventListener('click', () => moveLeft());
+    btnRight.addEventListener('click', () => moveRight());
 
     function handleKeyPress(event) {
         switch (event.key) {

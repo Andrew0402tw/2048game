@@ -184,5 +184,6 @@ document.addEventListener('DOMContentLoaded', () => {
         scoreDisplay.textContent = '分數: ' + score;
     }
 
+    // Automatically start the game on page load
     initBoard();
 });

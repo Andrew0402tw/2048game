@@ -3,10 +3,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreDisplay = document.getElementById('score');
     const restartButton = document.getElementById('restartButton');
     const gameOverDisplay = document.getElementById('gameOver');
+    const languageSelector = document.getElementById('languageSelector');
+    const title = document.getElementById('title');
     const size = 4;
     let tiles = [];
     let score = 0;
     let startX, startY, endX, endY;
+    let currentLanguage = 'zh-TW';
+
+    const texts = {
+        'zh-TW': {
+            title: '2048 遊戲',
+            score: '分數',
+            restart: '重新開始',
+            gameOver: 'Game Over'
+        },
+        'en': {
+            title: '2048 Game',
+            score: 'Score',
+            restart: 'Restart',
+            gameOver: 'Game Over'
+        }
+    };
+
+    function updateText() {
+        title.textContent = texts[currentLanguage].title;
+        scoreDisplay.textContent = `${texts[currentLanguage].score}: ${score}`;
+        restartButton.textContent = texts[currentLanguage].restart;
+        gameOverDisplay.textContent = texts[currentLanguage].gameOver;
+    }
 
     // Initialize board with empty tiles
     function initBoard() {
@@ -38,6 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle key events for tile movements
     document.addEventListener('keydown', handleKeyPress);
     restartButton.addEventListener('click', initBoard);
+    languageSelector.addEventListener('change', (event) => {
+        currentLanguage = event.target.value;
+        updateText();
+    });
 
     // Handle touch events for mobile devices
     document.addEventListener('touchstart', handleTouchStart);
@@ -196,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update score display
     function updateScore() {
-        scoreDisplay.textContent = `分數: ${score}`;
+        scoreDisplay.textContent = `${texts[currentLanguage].score}: ${score}`;
     }
 
     // Check if game is over
@@ -229,4 +258,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Start game
     initBoard();
+    updateText();
 });

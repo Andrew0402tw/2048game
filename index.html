@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2048 游戏</title>
+    <title>2048 遊戲</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>2048 游戏</h1>
+    <h1 id="title">2048 遊戲</h1>
     <div class="game-info">
-        <div id="score">分数: 0</div>
-        <button id="restartButton">重新开始</button>
+        <div id="score">分數: 0</div>
+        <button id="restartButton">重新開始</button>
+        <select id="languageSelector">
+            <option value="zh-TW">繁體中文</option>
+            <option value="en">English</option>
+        </select>
     </div>
     <div class="game-container">
         <div id="board">

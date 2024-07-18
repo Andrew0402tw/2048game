@@ -1,10 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     const board = document.getElementById('board');
+    const scoreDisplay = document.getElementById('score');
+    const restartButton = document.getElementById('restartButton');
     const size = 4;
     let tiles = [];
+    let score = 0;
     
     // Initialize board with empty tiles
     function initBoard() {
+        board.innerHTML = '';
+        tiles = [];
         for (let i = 0; i < size * size; i++) {
             const tile = document.createElement('div');
             tile.className = 'tile';
@@ -12,6 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
             board.appendChild(tile);
             tiles.push(tile);
         }
+        score = 0;
+        updateScore();
         addNewTile();
         addNewTile();
     }
@@ -27,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle key events for tile movements
     document.addEventListener('keydown', handleKeyPress);
+    restartButton.addEventListener('click', initBoard);
 
     function handleKeyPress(event) {
         switch (event.key) {
@@ -47,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Move tiles up
     function moveUp() {
+        let moved = false;
         for (let i = 0; i < size; i++) {
             let column = [];
             for (let j = 0; j < size; j++) {
@@ -54,15 +63,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             let newColumn = mergeTiles(column);
             for (let j = 0; j < size; j++) {
+                if (tiles[j * size + i].dataset.value != newColumn[j]) moved = true;
                 tiles[j * size + i].dataset.value = newColumn[j];
                 tiles[j * size + i].textContent = newColumn[j] != 0 ? newColumn[j] : '';
             }
         }
-        addNewTile();
+        if (moved) addNewTile();
     }
 
     // Move tiles down
     function moveDown() {
+        let moved = false;
         for (let i = 0; i < size; i++) {
             let column = [];
             for (let j = 0; j < size; j++) {
@@ -70,15 +81,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             let newColumn = mergeTiles(column.reverse()).reverse();
             for (let j = 0; j < size; j++) {
+                if (tiles[j * size + i].dataset.value != newColumn[j]) moved = true;
                 tiles[j * size + i].dataset.value = newColumn[j];
                 tiles[j * size + i].textContent = newColumn[j] != 0 ? newColumn[j] : '';
             }
         }
-        addNewTile();
+        if (moved) addNewTile();
     }
 
     // Move tiles left
     function moveLeft() {
+        let moved = false;
         for (let i = 0; i < size; i++) {
             let row = [];
             for (let j = 0; j < size; j++) {
@@ -86,15 +99,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             let newRow = mergeTiles(row);
             for (let j = 0; j < size; j++) {
+                if (tiles[i * size + j].dataset.value != newRow[j]) moved = true;
                 tiles[i * size + j].dataset.value = newRow[j];
                 tiles[i * size + j].textContent = newRow[j] != 0 ? newRow[j] : '';
             }
         }
-        addNewTile();
+        if (moved) addNewTile();
     }
 
     // Move tiles right
     function moveRight() {
+        let moved = false;
         for (let i = 0; i < size; i++) {
             let row = [];
             for (let j = 0; j < size; j++) {
@@ -102,26 +117,34 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             let newRow = mergeTiles(row.reverse()).reverse();
             for (let j = 0; j < size; j++) {
+                if (tiles[i * size + j].dataset.value != newRow[j]) moved = true;
                 tiles[i * size + j].dataset.value = newRow[j];
                 tiles[i * size + j].textContent = newRow[j] != 0 ? newRow[j] : '';
             }
         }
-        addNewTile();
+        if (moved) addNewTile();
     }
 
-    // Merge tiles
+    // Merge tiles and calculate score
     function mergeTiles(line) {
         let newLine = line.filter(value => value != 0);
         for (let i = 0; i < newLine.length - 1; i++) {
             if (newLine[i] == newLine[i + 1]) {
                 newLine[i] *= 2;
+                score += newLine[i];
                 newLine.splice(i + 1, 1);
             }
         }
         while (newLine.length < size) {
             newLine.push(0);
         }
+        updateScore();
         return newLine;
+    }
+
+    // Update score display
+    function updateScore() {
+        scoreDisplay.textContent = `分數: ${score}`;
     }
 
     initBoard();
